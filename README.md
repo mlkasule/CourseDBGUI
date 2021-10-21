@@ -1,4 +1,4 @@
-# CourseDataBase GUI app Assignment 4
+# CourseDataBase GUI app
 Most data is stored in databases, for ready access and organization.  Our course data is backed up by IT in databases which makes our data easy to access and use.   Write a program that creates a database of courses.  It will either read from a file of courses, or allow the user to add one course at a time.   Upload the initial files and your working files in the repository in GitHub you created in Lab 1, in a directory named Assignment4. Take a screenshot of your repo, and post the assignment to the Assignment 4 dropbox.
 ## Concepts Tested
 Hash Table, 
