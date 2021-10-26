@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /*
  *	CourseDBElement implements Comparable, and consists of five attributes:
  *  the Course ID (a String), 
@@ -16,12 +18,20 @@ public class CourseDBElement<T> implements Comparable<T> {
 	private String instructorName;
 
 	// CONSTRUCTOR
+	public CourseDBElement() {
+		this.courseID = "";
+		this.crn = 0;
+		this.numberOfCredits = 0;
+		this.roomNumber = "";
+		this.instructorName = "";
+	}
+
 	public CourseDBElement(String courseID, int crn, int numberOfCredits, String roomNumber, String instructorName) {
 		this.courseID = courseID;
 		this.crn = crn;
-		this.numberOfCredits = numberOfCredits;
-		this.roomNumber = roomNumber;
-		this.instructorName = instructorName;
+		this.setNumberOfCredits(numberOfCredits);
+		this.setRoomNumber(roomNumber);
+		this.setInstructorName(instructorName);
 	}
 
 	// METHODS
@@ -39,7 +49,7 @@ public class CourseDBElement<T> implements Comparable<T> {
 	public void setCourseID(String courseID) {
 		this.courseID = courseID;
 	}
-	
+
 	/**
 	 * @return the crn
 	 */
@@ -54,15 +64,58 @@ public class CourseDBElement<T> implements Comparable<T> {
 		this.crn = crn;
 	}
 
+	/**
+	 * @return the numberOfCredits
+	 */
+	public int getNumberOfCredits() {
+		return numberOfCredits;
+	}
+
+	/**
+	 * @param numberOfCredits the numberOfCredits to set
+	 */
+	public void setNumberOfCredits(int numberOfCredits) {
+		this.numberOfCredits = numberOfCredits;
+	}
+
+	/**
+	 * @return the roomNumber
+	 */
+	public String getRoomNumber() {
+		return roomNumber;
+	}
+
+	/**
+	 * @param roomNumber the roomNumber to set
+	 */
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
+	}
+
+	/**
+	 * @return the instructorName
+	 */
+	public String getInstructorName() {
+		return instructorName;
+	}
+
+	/**
+	 * @param instructorName the instructorName to set
+	 */
+	public void setInstructorName(String instructorName) {
+		this.instructorName = instructorName;
+	}
+	
+
 	/*
 	 * compare if passed element exits or not
+	 * 
 	 * @return true of false
 	 */
+	public int compareTo(T x) {
 
-	@Override
-	public int compareTo(T thing) {
-		
 		return getCRN();
 	}
+	
 
 }
