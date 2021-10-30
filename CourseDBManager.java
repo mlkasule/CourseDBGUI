@@ -1,35 +1,49 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
-public class CourseDBManager implements CourseDBManagerInterface {
-
+public class CourseDBManager extends CourseDBStructure implements CourseDBManagerInterface {
+	
 	public CourseDBManager() {
-		// TODO Auto-generated constructor stub
+		super(0);
+	}
+	public CourseDBManager(int hashTableSize) {
+		super(hashTableSize);
 	}
 
-	@Override
+	CourseDBStructure cds = new CourseDBStructure(getTableSize());
+
+
 	public void add(String id, int crn, int credits, String roomNum, String instructor) {
-		// TODO Auto-generated method stub
+
+		CourseDBElement cde = new CourseDBElement(id, crn, credits, roomNum, instructor);
+		cds.add(cde);
 
 	}
 
 	@Override
 	public CourseDBElement get(int crn) {
-		// TODO Auto-generated method stub
-		return null;
+		return cds.show(crn);
 	}
 
 	@Override
 	public void readFile(File input) throws FileNotFoundException {
-		// TODO Auto-generated method stub
+
+		FileReader fr = new FileReader(input);
+		int i;
+		try {
+			while ((i = fr.read()) != -1)
+				System.out.print((char) i);
+			fr.close();
+		} catch (Exception e) {
+			throw new FileNotFoundException("File not found");
+
+		}
 
 	}
 
 	@Override
 	public ArrayList<String> showAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return cds.showAll();
 	}
 
 }

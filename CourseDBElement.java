@@ -105,7 +105,6 @@ public class CourseDBElement<T> implements Comparable<T> {
 	public void setInstructorName(String instructorName) {
 		this.instructorName = instructorName;
 	}
-	
 
 	/*
 	 * compare if passed element exits or not
@@ -116,6 +115,22 @@ public class CourseDBElement<T> implements Comparable<T> {
 
 		return getCRN();
 	}
-	
 
+	/*
+	 * get a hash code for based on the crn
+	 */
+	@Override
+	public int hashCode() {
+		return ("" + getCRN()).hashCode();
+	}
+
+	/*
+	 * toString method to return
+	 */
+	public String toString() {
+		String elementValue = "Course: " + getCourseID() + " CRN " + getCRN() + " Credits " + getNumberOfCredits()
+				+ " Instructor " + getInstructorName();
+
+		return elementValue;
+	}
 }

@@ -2,22 +2,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.*;
 
 public class CourseDBStructure extends CourseDBElement implements CourseDBStructureInterface {
 
 	private int hashTableSize;
 	private String testWord;
-	private LinkedList<CourseDBElement> myList;
-	private Hashtable<Integer, CourseDBElement> hashTable;
+	private int itemCRNHashCode; // hashcode
+	private CourseDBElement newItem;
+	private LinkedList<CourseDBElement> list;
+	ArrayList<CourseDBElement> hashTable;
+	Hashtable<Integer, CourseDBElement> myHashTable; // should be an array
+
+	public CourseDBStructure(String courseID, int crn, int numberOfCredits, String roomNumber, String instructorName) {
+		super(courseID, crn, numberOfCredits, roomNumber, instructorName);
+	}
 
 	public CourseDBStructure(int hashTableSize) {
 		super();
-		this.setHashTableSize(hashTableSize);
+		this.hashTableSize = hashTableSize;
+		list = null;
 	}
 
 	public CourseDBStructure(String testString, int hashTableSize) {
-		this.setHashTableSize(hashTableSize);
+		this.hashTableSize = hashTableSize;
 		this.testWord = testWord;
+		list = null;
 	}
 
 	/**
@@ -41,26 +51,47 @@ public class CourseDBStructure extends CourseDBElement implements CourseDBStruct
 	public void add(CourseDBElement element) {
 
 		// get all element details
-		CourseDBElement newItem = new CourseDBElement(element.getCourseID(), element.getCRN(),
-				element.getNumberOfCredits(), element.getRoomNumber(), element.getInstructorName());
+		newItem = new CourseDBElement(element.getCourseID(), element.getCRN(), element.getNumberOfCredits(),
+				element.getRoomNumber(), element.getInstructorName());
 
-//		// Create Array list to hold element details into an arraylist
-//		ArrayList<CourseDBElement> arr = new ArrayList<CourseDBElement>();
-//		
-//		// add element to list
-//		arr.add(newItem);
+		// create a hashCode of the element passed based on crn
+		itemCRNHashCode = newItem.hashCode();
 
-		// get hashCode of the element passed
-		int itemCode = newItem.hashCode();
+		hashTable = new ArrayList<CourseDBElement>();
 
-		// Create an empty hashTable
-		hashTable = new Hashtable<Integer, CourseDBElement>();
+		for (int i = 0; i < hashTable.size(); i++) {
+			while (i != itemCRNHashCode) {
+				// Create Array list to hold element details into an arraylist
+				hashTable.add(itemCRNHashCode, newItem);
+			}
+		}
+
+		// Instantiate a linked list
+		list = new LinkedList<CourseDBElement>();
+
+		// add element to linked list
+		list.add(newItem);
+
+//		// Create an empty hash Table
+		myHashTable = new Hashtable<Integer, CourseDBElement>();
 
 		// if hashCode does not exist, then add it in table
-		if (!(hashTable.containsKey(itemCode))) {
+		if (!(myHashTable.containsKey(itemCRNHashCode))) {
 			// add element to table mapped to this given hashCode
-			hashTable.put(itemCode, newItem);
+			myHashTable.put(itemCRNHashCode, newItem);
 		}
+
+	}
+
+	/*
+	 * Add test for string, int
+	 */
+	public void add(String test, int size) {
+
+		// Instantiate testing constructor
+		CourseDBStructure testConstructor = new CourseDBStructure(test, size);
+
+		list.add(testConstructor);
 
 	}
 
@@ -77,8 +108,40 @@ public class CourseDBStructure extends CourseDBElement implements CourseDBStruct
 
 	@Override
 	public CourseDBElement get(int crn) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+
+		CourseDBElement element = new CourseDBElement();
+
+		// check if hashtable array list is not empty
+		if (!hashTable.isEmpty()) {
+
+			// check if list itself is not null
+
+			if (list != null) {
+				// check for each element at i
+
+				for (int i = 0; i < list.size(); i++) {
+
+					// check for each element's getCRn == crn passed
+
+					if (newItem.getCRN() == crn) {
+
+						// if yes, assign that crn to itemCRNHashCode
+						itemCRNHashCode = crn;
+
+						// check if that key that matches any hash key in hashTable or return IO
+						// exception
+						if (myHashTable.containsKey(itemCRNHashCode)) {
+							element = hashTable.get(itemCRNHashCode);
+						} else {
+							throw new IOException("Hashkey does not exit");
+						}
+					}
+				}
+			}
+
+		}
+
+		return element;
 	}
 
 	/**
@@ -88,6 +151,47 @@ public class CourseDBStructure extends CourseDBElement implements CourseDBStruct
 	@Override
 	public int getTableSize() {
 		return hashTableSize;
+	}
+
+	/*
+	 * Show all elements in list
+	 * 
+	 * @return arraylist of elements
+	 */
+	public ArrayList<String> showAll() {
+
+		// store all elements within a linked list into an array list
+		ArrayList<String> printList = new ArrayList<String>(getTableSize());
+
+		// loop through every element and add it to arraylist
+//		for (int i = 0; i < hashTable.size(); i++) {
+//			printList.add(list.get(i).toString());
+//		}
+		int i = 0;
+
+		while (i < hashTableSize) {
+			printList.add(hashTable.get(i).toString());
+			i++;
+		}
+
+		return printList;
+	}
+
+	public CourseDBElement show(int crn) {
+
+		// create and store the element in question
+		CourseDBElement displayElement = new CourseDBElement();
+
+		// loop through every key in hashTable
+		for (int i = 0; i < getTableSize(); i++) {
+
+			// check for key matching with crn
+			if (myHashTable.containsKey(crn)) {
+				displayElement = hashTable.get(crn);
+			}
+		}
+
+		return displayElement;
 	}
 
 }
